@@ -262,7 +262,7 @@
     <div class="add" id="add">
       <span class="plus">+</span>
       <input id="input" type="text" placeholder="Add something…" autocomplete="off"
-             autocapitalize="sentences" enterkeyhint="done">
+             autocapitalize="sentences" enterkeyhint="done" maxlength="16">
     </div>
     <div class="full" id="full">List full — finish or remove one to add another.</div>
   </main>
@@ -275,6 +275,7 @@
 <script>
   const KEY = 'dia-simple-todos';
   const MAX = 3;
+  const MAXLEN = 16;
   const listEl = document.getElementById('list');
   const inputEl = document.getElementById('input');
   const countEl = document.getElementById('count');
@@ -419,7 +420,7 @@
       editing = false;
       text.removeAttribute('contenteditable');
       text.classList.remove('editing');
-      const v = text.textContent.trim();
+      const v = text.textContent.trim().slice(0, MAXLEN);
       if (v) { todos[i].text = v; save(); }
       render(); // re-sync (also restores empty text if blanked)
     }
@@ -492,7 +493,7 @@
 
   inputEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      const v = inputEl.value.trim();
+      const v = inputEl.value.trim().slice(0, MAXLEN);
       if (!v) return;
       if (todos.length >= MAX) return;
       todos.unshift({ text: v, done: false });
